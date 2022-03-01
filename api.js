@@ -27,7 +27,6 @@ const displayMobile=(mData)=>{
     const displayDiv=document.getElementById('mainDiv')
         displayDiv.textContent=''
     mData.forEach(mobile => {
-        console.log(mobile);
         const div=document.createElement('div')
        
         div.innerHTML=`<div class="card p-2">
@@ -35,7 +34,7 @@ const displayMobile=(mData)=>{
          <div class="card-body">
          <h5 class="class-title"><span class="text-info">name:</span> ${mobile.phone_name}</h5> 
           <h5 class="class-title"><span class="text-info">Brand:</span> ${mobile.brand}</h5>     
-          <button onclick="mobileDetails('${mobile.slug}')" class="btn bg-primary text-white mt-3">Mobile details</button>    
+          <button data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="mobileDetails('${mobile.slug}')" class="btn bg-primary text-white mt-3">Mobile details</button>    
 
         </div>
         </div>
@@ -52,28 +51,70 @@ const displayMobile=(mData)=>{
 }
 
 const mobileDetails=id=>{
-    const url= ` https://openapi.programming-hero.com/api/phone/${id}`
+    const url=  `https://openapi.programming-hero.com/api/phone/${id}`
         fetch(url)
         .then(response => response.json())
         .then(data=>displayDeatils(data)); 
     
 }
 const displayDeatils=data=>{
+console.log(data.data.releaseDate);
+
+
+let releaseDate;
+if(data.data.releaseDate==''){
+    releaseDate=`No Release Date Found`
+}else{
+    releaseDate=data.data.releaseDate;
+}
+
+  const product_details_page=document.getElementById('product-details-page');
+  document.getElementById('product-details-page').textContent=''
     const div=document.createElement('div')
-    // console.log(data);
-    
        
-    div.innerHTML=`<div class="card p-2">
-    <img src="${data.image}"class="card-img-top"alt="...">
-    
-     <div class="card-body">
-     <h5 class="class-title"><span class="text-info">name:</span> ${data.name}</h5> 
-      <h5 class="class-title"><span class="text-info">Brand:</span> ${data.brand}</h5>     
-        
+    div.innerHTML=`
+
+    <div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Phone Details</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+    <div class="d-lg-flex m-2 justify-content-center align-items-center ">
+
+    <div class="card border-0   w-80">
+    <img src="${data.data.image}" class="img-fluid" alt="...">   
+    </div>
+
+    <div class="ms-lg-5  w-80 ">
+
+    <h4 class="card-title fw-bolder py-2">${data.data.name}</h4>
+    <h6 class="card-title fw-bolder">${data.data.brand}</h6>
+    <p>${releaseDate}</p>
+    <hr>
+    <h6 style='border-bottom:1px solid gray; ' class='w-50 p-1 tw-bolder'>Main Features</h6>
+                <ul>
+                    <li> Chip Set: ${data.data.mainFeatures.chipSet}</li>
+                      <li >Memory: ${data.data.mainFeatures.memory}</li>
+                      <li >Display Size: ${data.data.mainFeatures.displaySize}</li>
+                      <li > Storage:${data.data.mainFeatures.storage}</li>
+                      <li> Sensors: ${data.data.mainFeatures.sensors.slice(0,2)}
+                             <br>
+                              ${data.data.mainFeatures.sensors.slice(2,6)} 
+                        </li>
+                        </ul>
+                    <hr>
+                   
+   
+
 
     </div>
     </div>
+    </div>
+    </div>
+
     
     `
-    document.body.appendChild(div)
+    product_details_page.appendChild(div)
 }
+
