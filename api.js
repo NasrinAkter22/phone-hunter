@@ -4,11 +4,13 @@ document.getElementById('loadModule').addEventListener('click',()=>{
 
     const input=document.getElementById('inputFild')
     const inputText=input.value;
-    
-    if (input.value==''){
-        displayDiv.innerHTML=''
-        error.innerText="please enter valid name"
-        // input.valu=''
+    document.getElementById('inputFild').value=''
+    if (inputText==''){
+      const h2=document.getElementById('error_message');
+      h2.innerText='Plsease search by entering the product name'
+      document.getElementById('product-details-page').textContent=''
+      document.getElementById('mainDiv').textContent=''
+
     }
     else{
         const url=`https://openapi.programming-hero.com/api/phones?search=${inputText}`
@@ -23,31 +25,41 @@ document.getElementById('loadModule').addEventListener('click',()=>{
 
 
 const displayMobile=(mData)=>{
-  
-    const displayDiv=document.getElementById('mainDiv')
-        displayDiv.textContent=''
-    mData.forEach(mobile => {
-        const div=document.createElement('div')
-       
-        div.innerHTML=`<div class="card p-2">
-        <img src="${mobile.image}"class="card-img-top"alt="...">
-         <div class="card-body">
-         <h5 class="class-title"><span class="text-info">name:</span> ${mobile.phone_name}</h5> 
-          <h5 class="class-title"><span class="text-info">Brand:</span> ${mobile.brand}</h5>     
-          <button data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="mobileDetails('${mobile.slug}')" class="btn bg-primary text-white mt-3">Mobile details</button>    
 
-        </div>
-        </div>
-        
-        `
-
-        displayDiv.appendChild(div)
-
-
-        
-  
-    });
+  if(mData.length=='0'){
+    const h2=document.getElementById('error_message');
+    h2.innerText=`Oops! We couldn't find results for your search:`
+    document.getElementById('product-details-page').textContent=''
+    document.getElementById('mainDiv').textContent=''
     
+}else{
+        
+  document.getElementById('error_message').innerText=''
+  const displayDiv=document.getElementById('mainDiv')
+      displayDiv.textContent=''
+  mData.forEach(mobile => {
+      const div=document.createElement('div')
+     
+      div.innerHTML=`<div class="card p-2">
+      <img src="${mobile.image}"class="card-img-top"alt="...">
+       <div class="card-body">
+       <h5 class="class-title"><span class="text-info">name:</span> ${mobile.phone_name}</h5> 
+        <h5 class="class-title"><span class="text-info">Brand:</span> ${mobile.brand}</h5>     
+        <button data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="mobileDetails('${mobile.slug}')" class="btn bg-primary text-white mt-3">Mobile details</button>    
+
+      </div>
+      </div>
+      
+      `
+
+      displayDiv.appendChild(div)
+
+
+  });   
+  
+
+   }
+      
 }
 
 const mobileDetails=id=>{
@@ -59,6 +71,7 @@ const mobileDetails=id=>{
 }
 const displayDeatils=data=>{
 console.log(data.data.releaseDate);
+document.getElementById('error_message').innerText=''
 
 
 let releaseDate;
@@ -66,6 +79,22 @@ if(data.data.releaseDate==''){
     releaseDate=`No Release Date Found`
 }else{
     releaseDate=data.data.releaseDate;
+}
+
+if(data.data.others==undefined){
+  bluetooth='No'
+  gps='No'
+  nfc='No'
+  radio='No'
+  usb='No'
+  wlan='No'
+}else{
+  bluetooth=data.data.others.Bluetooth;
+  gps=data.data.others.GPS;
+  nfc=data.data.others.NFC
+  radio=data.data.others.Radio
+  usb=data.data.others.USB
+  wlan=data.data.others.WLAN
 }
 
   const product_details_page=document.getElementById('product-details-page');
@@ -104,7 +133,15 @@ if(data.data.releaseDate==''){
                         </li>
                         </ul>
                     <hr>
-                   
+                    <h6 style='border-bottom:1px solid gray; ' class='w-50 p-1 tw-bolder'>Other Features</h6>
+                    <ul>
+                        <li >Bluetooth: ${bluetooth}</li>
+                        <li > GPS:${gps}</li>
+                        <li > NFC: ${nfc}</li>
+                        <li >Radio: ${radio}</li>
+                        <li > USB: ${usb}</li>
+                        <li > WLAN: ${wlan}</li>   
+                    </ul>
    
 
 
