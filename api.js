@@ -60,7 +60,8 @@ const mobileDetails=id=>{
 }
 const displayDeatils=data=>{
     const div=document.createElement('div')
-    console.log(data);
+    // console.log(data);
+    
        
     div.innerHTML=`<div class="card p-2">
     <img src="${data.image}"class="card-img-top"alt="...">
