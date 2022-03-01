@@ -44,6 +44,11 @@ const displayMobile=(mData)=>{
 
         displayDiv.appendChild(div)
 
+
+        const url= 
+        fetch(url)
+        .then(response => response.json())
+        .then(data => displayMobile(data. 
         
   
     });
